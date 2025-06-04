@@ -58,6 +58,8 @@ export default function Blog({ params }) {
     notFound()
   }
 
+  const mdxContent = await CustomMDX({ source: post.content })
+
   return (
     <section>
       <script
@@ -91,7 +93,7 @@ export default function Blog({ params }) {
         </p>
       </div>
       <article className="prose">
-        <CustomMDX source={post.content} />
+        {mdxContent}
       </article>
     </section>
   )
