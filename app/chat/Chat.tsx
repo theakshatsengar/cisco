@@ -4,8 +4,7 @@ import { useState, useRef, useEffect } from 'react';
 
 export default function Chat() {
   const [messages, setMessages] = useState([
-    { sender: 'user', text: 'hi' },
-    { sender: 'cisco', text: 'hi' },
+    { sender: 'cisco', text: 'hi, how can i help you?' },
   ]);
   const [input, setInput] = useState('');
   const [loading, setLoading] = useState(false);
@@ -19,7 +18,6 @@ export default function Chat() {
     setInput('');
     setLoading(true);
 
-    // Show user message immediately
     setMessages((prev) => [...prev, { sender: 'user', text: userMsg }]);
 
     try {
@@ -48,8 +46,36 @@ export default function Chat() {
   }, [messages]);
 
   return (
-    <>
-      <div ref={scrollRef} className="flex-1 overflow-y-auto">
+    <section
+      style={{
+        display: 'flex',
+        flexDirection: 'column',
+        maxHeight: '70vh',
+        width: '100%',
+      }}
+    >
+      <style>{`
+        /* Hide scrollbar for Chrome, Safari and Edge */
+        div::-webkit-scrollbar {
+          width: 0;
+          height: 0;
+        }
+        /* Hide scrollbar for Firefox */
+        div {
+          scrollbar-width: none;
+        }
+      `}</style>
+
+      <div
+        ref={scrollRef}
+        style={{
+          overflowY: 'auto',
+          overflowX: 'hidden',
+          flexGrow: 1,
+          paddingRight: '0.25rem',
+          wordBreak: 'break-word',
+        }}
+      >
         {messages.map((msg, idx) => {
           const next = messages[idx + 1];
           const isUser = msg.sender === 'user';
@@ -58,32 +84,40 @@ export default function Chat() {
           return (
             <p
               key={idx}
-              className={isUser && nextIsCisco ? 'mb-1' : 'mb-6'}
+              style={{ marginBottom: isUser && nextIsCisco ? '0.25rem' : '1.5rem' }}
             >
-              <span className="font-medium">{msg.sender}:</span> {msg.text}
+              <span style={{ fontWeight: 600 }}>{msg.sender}:</span> {msg.text}
             </p>
           );
         })}
 
         {loading && (
-          <p className="mb-6">
-            <span className="font-medium">cisco:</span> typing...
+          <p style={{ marginBottom: '1.5rem' }}>
+            <span style={{ fontWeight: 600 }}>cisco:</span> typing...
           </p>
         )}
       </div>
 
-      <form onSubmit={handleSubmit} className="mt-4">
-        <p className="text-base">
-          <span className="font-medium">user:</span>{' '}
+      <form onSubmit={handleSubmit} style={{ marginTop: '0.25rem' }}>
+        <p style={{ fontSize: '1rem', margin: 0, whiteSpace: 'nowrap' }}>
+          <span style={{ fontWeight: 600 }}>user:</span>{' '}
           <input
             type="text"
             value={input}
             onChange={(e) => setInput(e.target.value)}
-            className="bg-transparent outline-none border-none focus:outline-none"
+            style={{
+              backgroundColor: 'transparent',
+              outline: 'none',
+              border: 'none',
+              fontSize: '1rem',
+              width: '60vw',
+              display: 'inline',
+              verticalAlign: 'middle',
+            }}
             autoFocus
           />
         </p>
       </form>
-    </>
+    </section>
   );
 }
