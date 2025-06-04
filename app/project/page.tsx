@@ -18,7 +18,7 @@ export default function Page() {
         
         <p className="mb-4">and here are some projects i've built :</p>
         <hr className="my-6 border-neutral-100 dark:border-neutral-800" />
-        <BlogPosts />
+        
         <hr className="my-6 border-neutral-100 dark:border-neutral-800" />
       </div>
     </section>

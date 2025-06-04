@@ -10,7 +10,6 @@ export default function Page() {
     <section>
       <h1 className="font-semibold text-2xl mb-8 tracking-tighter">my blog.</h1>
       <hr className="my-6 border-neutral-100 dark:border-neutral-800" />
-      <BlogPosts />
       <hr className="my-6 border-neutral-100 dark:border-neutral-800" />
     </section>
   )
