@@ -84,16 +84,10 @@ export default function Chat() {
       </div>
 
       <form onSubmit={handleSubmit} className="mb-0">
-        <p className="text-base">
-          <span className="font-medium">user:</span>{' '}
-          <input
-            type="text"
-            value={input}
-            onChange={(e) => setInput(e.target.value)}
-            className="bg-transparent outline-none border-none focus:outline-none inline-block w-[90%]"
-            autoFocus
-          />
-        </p>
+        <div className="flex items-center text-base"> 
+          <span className="font-medium mr-2">user:</span>
+          <input type="text" value={input} onChange={(e) => setInput(e.target.value)} className="flex-1 bg-transparent outline-none border-none focus:outline-none" autoFocus /> 
+        </div>
       </form>
     </section>
   );
