@@ -26,6 +26,11 @@
   }
   html {
     color-scheme: dark;
+    background-color: rgb(17, 16, 16); /* <-- Add this line */
+  }
+
+  body {
+    background-color: rgb(17, 16, 16); /* <-- Also add this line for body specifically */
   }
 }
 
