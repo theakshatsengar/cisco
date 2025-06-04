@@ -99,13 +99,11 @@ let components = {
   Table,
 }
 
-export async function CustomMDX(props) {
-  return await MDXRemote({
-    ...props,
-    components: {
-      ...components,
-      ...(props.components || {}),
-    },
-  })
+export function CustomMDX(props) {
+  return (
+    <MDXRemote
+      {...props}
+      components={{ ...components, ...(props.components || {}) }}
+    />
+  )
 }
-

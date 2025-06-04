@@ -51,14 +51,12 @@ export function generateMetadata({ params }) {
   }
 }
 
-export default async function Blog({ params }) {
+export default function Blog({ params }) {
   let post = getBlogPosts().find((post) => post.slug === params.slug)
 
   if (!post) {
     notFound()
   }
-
-  const mdxContent = await CustomMDX({ source: post.content })
 
   return (
     <section>
@@ -93,7 +91,7 @@ export default async function Blog({ params }) {
         </p>
       </div>
       <article className="prose">
-        {mdxContent}
+        <CustomMDX source={post.content} />
       </article>
     </section>
   )
