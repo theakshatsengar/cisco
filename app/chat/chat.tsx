@@ -18,20 +18,27 @@ export default function Chat() {
     setInput('');
     setLoading(true);
 
+    // Append user message to UI immediately
     setMessages((prev) => [...prev, { sender: 'user', text: userMsg }]);
 
     try {
+      // Prepare pastMessages for API format
+      const pastMessages = messages.map((msg) => ({
+        role: msg.sender === 'user' ? 'user' : 'assistant',
+        content: msg.text,
+      }));
+
       const res = await fetch('/api/groq', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ message: userMsg }),
+        body: JSON.stringify({ message: userMsg, pastMessages }),
       });
 
       const data = await res.json();
       const botResponse = data.response;
 
       setMessages((prev) => [...prev, { sender: 'cisco', text: botResponse }]);
-    } catch (err) {
+    } catch {
       setMessages((prev) => [...prev, { sender: 'cisco', text: 'Failed to connect to AI.' }]);
     } finally {
       setLoading(false);
@@ -48,20 +55,15 @@ export default function Chat() {
   return (
     <section>
       <h1 className="mb-2 text-2xl font-semibold tracking-tighter">chat with cisco.</h1>
-      <p className="mb-8">
-        {`feel free to ask anything or chat.`}
-      </p>
+      <p className="mb-8">feel free to ask anything or chat.</p>
+
       <div
         ref={scrollRef}
         className="overflow-y-auto max-h-[60vh] mb-4"
         style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
       >
-        {/* Hide scrollbar for Webkit */}
-        <style>{`
-          div::-webkit-scrollbar {
-            display: none;
-          }
-        `}</style>
+        <style>{`div::-webkit-scrollbar { display: none; }`}</style>
+
         {messages.map((msg, idx) => {
           const next = messages[idx + 1];
           const isUser = msg.sender === 'user';
