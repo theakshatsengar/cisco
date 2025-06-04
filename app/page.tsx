@@ -9,12 +9,6 @@ export default function Page() {
         {`focused on creating intuitive and performant web experiences. bridging the gap between design and development.`}
       </p>
 
-      {/* <div className="my-8">
-        <p className="mb-4">my blogs :</p>
-        <hr className="my-6 border-neutral-100 dark:border-neutral-800" />
-        <BlogPosts />
-        <hr className="my-6 border-neutral-100 dark:border-neutral-800" />
-      </div> */}
     </section>
   )
 }
