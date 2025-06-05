@@ -55,11 +55,11 @@ export default function Chat() {
   return (
     <section>
       <h1 className="mb-2 text-2xl font-semibold tracking-tighter">chat with cisco.</h1>
-      <p className="mb-8">feel free to ask anything or chat.</p>
-
+      <p className="mb-2">feel free to ask anything or chat.</p>
+      <hr className="my-6 border-neutral-100 dark:border-neutral-800" />
       <div
         ref={scrollRef}
-        className="overflow-y-auto max-h-[60vh] mb-4"
+        className="overflow-y-auto max-h-[70vh] mb-4"
         style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
       >
         <style>{`div::-webkit-scrollbar { display: none; }`}</style>
