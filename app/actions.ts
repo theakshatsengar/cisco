@@ -3,5 +3,5 @@
 import { signIn } from 'next-auth/react'
 
 export async function handleSignIn() {
-  await signIn('google', { callbackUrl: '/' })
+  await signIn('google', { callbackUrl: 'https://trycisco.xyz' })
 } 
