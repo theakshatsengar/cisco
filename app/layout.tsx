@@ -8,8 +8,7 @@ import { SpeedInsights } from '@vercel/speed-insights/next'
 import Footer from './components/footer'
 import { baseUrl } from './sitemap'
 import { AuthProvider } from './providers'
-import Nav from './components/Nav'
-import { headers } from 'next/headers'
+import Nav from './components/nav'
 
 export const metadata: Metadata = {
   metadataBase: new URL(baseUrl),
@@ -46,10 +45,6 @@ export default function RootLayout({
 }: {
   children: React.ReactNode
 }) {
-  const headersList = headers()
-  const pathname = headersList.get('x-pathname') || ''
-  const isSignInPage = pathname === '/signin'
-
   return (
     <html
       lang="en"

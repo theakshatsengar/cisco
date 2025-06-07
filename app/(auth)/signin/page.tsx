@@ -10,11 +10,11 @@ export default function SignIn() {
   return (
     <div className="fixed inset-0 flex items-center justify-center px-8">
       <div className="w-full max-w-md">
-        {/* <div className="mb-8">
+        <div className="mb-8">
           <h1 className="mb-2 text-2xl font-semibold tracking-tighter">chat with cisco.</h1>
           <p className="mb-2">feel free to ask anything or chat.</p>
           <hr className="my-6 border-neutral-100 dark:border-neutral-800" />
-        </div> */}
+        </div>
         <div className="flex flex-col items-center">
           <form onSubmit={(e) => { e.preventDefault(); handleSignIn(); }} className="w-full">
             <button
