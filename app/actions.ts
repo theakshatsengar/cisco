@@ -1,11 +1,7 @@
 'use server'
 
-import { signIn, signOut } from '../auth'
+import { signIn } from 'next-auth/react'
 
 export async function handleSignIn() {
-  await signIn('google')
-}
-
-export async function handleSignOut() {
-  await signOut()
+  await signIn('google', { callbackUrl: '/' })
 } 

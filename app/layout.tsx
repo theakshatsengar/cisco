@@ -2,25 +2,26 @@ import './global.css'
 import type { Metadata } from 'next'
 import { GeistSans } from 'geist/font/sans'
 import { GeistMono } from 'geist/font/mono'
-import { Navbar } from './components/nav'
+// import { Navbar } from './components/nav'
 import { Analytics } from '@vercel/analytics/react'
 import { SpeedInsights } from '@vercel/speed-insights/next'
+import Footer from './components/footer'
 import { baseUrl } from './sitemap'
-import { auth } from '../auth'
-import { SessionProvider } from 'next-auth/react'
+import { AuthProvider } from './providers'
+import Nav from './components/nav'
 
 export const metadata: Metadata = {
   metadataBase: new URL(baseUrl),
   title: {
-    default: 'chat with cisco',
-    template: '%s | chat with cisco',
+    default: 'cisco',
+    template: 'your ai pookie.',
   },
-  description: 'chat with cisco.',
+  description: 'your ai pookie.',
   openGraph: {
-    title: 'chat with cisco',
-    description: 'chat with cisco.',
+    title: 'cisco',
+    description: 'your ai pookie.',
     url: baseUrl,
-    siteName: 'chat with cisco',
+    siteName: 'cisco',
     locale: 'en_in',
     type: 'website',
   },
@@ -39,13 +40,11 @@ export const metadata: Metadata = {
 
 const cx = (...classes) => classes.filter(Boolean).join(' ')
 
-export default async function RootLayout({
+export default function RootLayout({
   children,
 }: {
   children: React.ReactNode
 }) {
-  const session = await auth()
-  
   return (
     <html
       lang="en"
@@ -56,14 +55,16 @@ export default async function RootLayout({
       )}
     >
       <body className="antialiased max-w-xl mx-4 mt-8 lg:mx-auto">
-        <SessionProvider session={session}>
+        <AuthProvider>
+          <Nav />
           <main className="flex-auto min-w-0 mt-6 flex flex-col px-2 md:px-0">
-            {session && <Navbar session={session} />}
+            {/* <Navbar /> */}
             {children}
+            <Footer />
             <Analytics />
             <SpeedInsights />
           </main>
-        </SessionProvider>
+        </AuthProvider>
       </body>
     </html>
   )
