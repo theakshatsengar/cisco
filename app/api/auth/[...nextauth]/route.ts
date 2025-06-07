@@ -8,13 +8,16 @@ const handler = NextAuth({
       clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
     }),
   ],
+  callbacks: {
+    async session({ session, token }) {
+      if (session.user) {
+        session.user.name = session.user.name?.split(' ')[0] // Get first name only
+      }
+      return session
+    },
+  },
   pages: {
     signIn: '/signin',
-  },
-  callbacks: {
-    async redirect({ url, baseUrl }) {
-      return url.startsWith(baseUrl) ? url : baseUrl
-    },
   },
 })
 

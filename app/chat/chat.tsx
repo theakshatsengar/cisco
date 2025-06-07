@@ -1,8 +1,10 @@
 'use client';
 
 import { useState, useRef, useEffect } from 'react';
+import { useSession } from 'next-auth/react';
 
 export default function Chat() {
+  const { data: session } = useSession();
   const [messages, setMessages] = useState([
     { sender: 'cisco', text: 'hi, how can i help you?' },
   ]);
@@ -60,16 +62,8 @@ export default function Chat() {
   }, [messages]);
 
   return (
-    <section className="fixed inset-0 flex flex-col md:items-center md:justify-center">
+    <section className="fixed inset-0 flex flex-col md:items-center md:justify-center pt-16">
       <div className="w-full md:max-w-2xl flex flex-col h-full">
-        <div className="flex-none px-4 pt-4">
-          <h1 className="text-2xl font-semibold tracking-tighter">chat with cisco.</h1>
-        </div>
-        
-        <div className="w-full">
-          <hr className="mt-4 border-neutral-100 dark:border-neutral-800" />
-        </div>
-        
         <div
           ref={scrollRef}
           className="flex-1 overflow-y-auto px-4"
@@ -85,7 +79,9 @@ export default function Chat() {
 
               return (
                 <p key={idx} className={isUser && nextIsCisco ? 'mb-1' : 'mb-6'}>
-                  <span className="font-medium">{msg.sender}:</span> {msg.text}
+                  <span className="font-medium">
+                    {isUser ? session?.user?.name?.toLowerCase() : 'cisco'}:
+                  </span> {msg.text}
                 </p>
               );
             })}
@@ -104,7 +100,7 @@ export default function Chat() {
           </div>
           <form onSubmit={handleSubmit} className="p-4">
             <div className="flex items-center text-base"> 
-              <span className="font-medium mr-2">user:</span>
+              <span className="font-medium mr-2">{session?.user?.name?.toLowerCase()}:</span>
               <textarea 
                 value={input} 
                 onChange={(e) => setInput(e.target.value)}

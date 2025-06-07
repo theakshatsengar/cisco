@@ -1,34 +1,23 @@
-import Link from 'next/link'
+'use client'
 
-const navItems = {
-  '/': {
-    name: 'chat with cisco',
-  },
-}
+import { useSession } from 'next-auth/react'
+import Image from 'next/image'
 
-export function Navbar() {
+export default function Nav() {
+  const { data: session } = useSession()
+
   return (
-    <aside className="-ml-[8px] mb-16 tracking-tight">
-      <div className="lg:sticky lg:top-20">
-        <nav
-          className="flex flex-row items-start relative px-0 pb-0 fade md:overflow-auto scroll-pr-6 md:relative"
-          id="nav"
-        >
-          <div className="flex flex-row space-x-0 pr-10">
-            {Object.entries(navItems).map(([path, { name }]) => {
-              return (
-                <Link
-                  key={path}
-                  href={path}
-                  className="transition-all hover:text-neutral-800 dark:hover:text-neutral-200 flex align-middle relative py-1 px-2 m-1"
-                >
-                  {name}
-                </Link>
-              )
-            })}
+    <nav className="fixed top-0 left-0 right-0 z-50 bg-white dark:bg-neutral-900 border-b border-neutral-200 dark:border-neutral-800">
+      <div className="max-w-2xl mx-auto px-4 h-16 flex items-center justify-between">
+        <h1 className="text-2xl font-semibold tracking-tighter">chat with cisco.</h1>
+        {session?.user && (
+          <div className="flex items-center gap-3">
+            <span className="text-sm text-neutral-600 dark:text-neutral-400">
+              {session.user.name?.toLowerCase()}
+            </span>
           </div>
-        </nav>
+        )}
       </div>
-    </aside>
+    </nav>
   )
 }
