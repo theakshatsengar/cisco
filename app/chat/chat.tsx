@@ -45,6 +45,13 @@ export default function Chat() {
     }
   };
 
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      handleSubmit(e);
+    }
+  };
+
   useEffect(() => {
     scrollRef.current?.scrollTo({
       top: scrollRef.current.scrollHeight,
@@ -53,42 +60,63 @@ export default function Chat() {
   }, [messages]);
 
   return (
-    <section>
-      <h1 className="mb-2 text-2xl font-semibold tracking-tighter">chat with cisco.</h1>
-      <p className="mb-2">feel free to ask anything or chat.</p>
-      <hr className="my-6 border-neutral-100 dark:border-neutral-800" />
-      <div
-        ref={scrollRef}
-        className="overflow-y-auto max-h-[70vh] mb-4"
-        style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
-      >
-        <style>{`div::-webkit-scrollbar { display: none; }`}</style>
-
-        {messages.map((msg, idx) => {
-          const next = messages[idx + 1];
-          const isUser = msg.sender === 'user';
-          const nextIsCisco = next?.sender === 'cisco';
-
-          return (
-            <p key={idx} className={isUser && nextIsCisco ? 'mb-1' : 'mb-6'}>
-              <span className="font-medium">{msg.sender}:</span> {msg.text}
-            </p>
-          );
-        })}
-
-        {loading && (
-          <p className="mb-6">
-            <span className="font-medium">cisco:</span> typing...
-          </p>
-        )}
-      </div>
-
-      <form onSubmit={handleSubmit} className="mb-0">
-        <div className="flex items-center text-base"> 
-          <span className="font-medium mr-2">user:</span>
-          <input type="text" value={input} onChange={(e) => setInput(e.target.value)} className="flex-1 bg-transparent outline-none border-none focus:outline-none" autoFocus /> 
+    <section className="fixed inset-0 flex flex-col md:items-center md:justify-center">
+      <div className="w-full md:max-w-2xl flex flex-col h-full">
+        <div className="flex-none px-4 pt-4">
+          <h1 className="text-2xl font-semibold tracking-tighter">chat with cisco.</h1>
         </div>
-      </form>
+        
+        <div className="w-full">
+          <hr className="mt-4 border-neutral-100 dark:border-neutral-800" />
+        </div>
+        
+        <div
+          ref={scrollRef}
+          className="flex-1 overflow-y-auto px-4"
+          style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+        >
+          <style>{`div::-webkit-scrollbar { display: none; }`}</style>
+
+          <div className="min-h-full flex flex-col justify-end py-4">
+            {messages.map((msg, idx) => {
+              const next = messages[idx + 1];
+              const isUser = msg.sender === 'user';
+              const nextIsCisco = next?.sender === 'cisco';
+
+              return (
+                <p key={idx} className={isUser && nextIsCisco ? 'mb-1' : 'mb-6'}>
+                  <span className="font-medium">{msg.sender}:</span> {msg.text}
+                </p>
+              );
+            })}
+
+            {loading && (
+              <p className="mb-6">
+                <span className="font-medium">cisco:</span> typing...
+              </p>
+            )}
+          </div>
+        </div>
+
+        <div className="flex-none">
+          <div className="w-full">
+            <div className="border-t border-neutral-100 dark:border-neutral-800" />
+          </div>
+          <form onSubmit={handleSubmit} className="p-4">
+            <div className="flex items-center text-base"> 
+              <span className="font-medium mr-2">user:</span>
+              <textarea 
+                value={input} 
+                onChange={(e) => setInput(e.target.value)}
+                onKeyDown={handleKeyDown}
+                className="flex-1 bg-transparent outline-none border-none focus:outline-none resize-none min-h-[24px] max-h-[120px] py-1"
+                rows={1}
+                autoFocus 
+              /> 
+            </div>
+          </form>
+        </div>
+      </div>
     </section>
   );
 }

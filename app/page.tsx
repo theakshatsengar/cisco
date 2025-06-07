@@ -1,5 +1,5 @@
 export const metadata = {
-  title: 'chat',
+  title: 'chat with cisco',
   description: 'chat with cisco',
 };
 
