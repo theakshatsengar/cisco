@@ -2,7 +2,8 @@
 
 import { useState, useRef, useEffect } from 'react';
 import { useSession } from 'next-auth/react';
-import { IoSend } from 'react-icons/io5';
+import { HiPaperAirplane } from 'react-icons/hi2';
+import type { IconType } from 'react-icons';
 
 export default function Chat() {
   const { data: session } = useSession();
@@ -116,7 +117,7 @@ export default function Chat() {
                 disabled={!input.trim()}
                 title="Send message"
               >
-                <IoSend className="w-5 h-5" />
+                {HiPaperAirplane({ className: "w-5 h-5" })}
               </button>
             </div>
           </form>
