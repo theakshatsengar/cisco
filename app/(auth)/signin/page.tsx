@@ -1,10 +1,29 @@
 'use client'
 
-import { signIn } from 'next-auth/react'
+import { signIn, useSession } from 'next-auth/react'
+import { useRouter } from 'next/navigation'
+import { useEffect } from 'react'
 
 export default function SignIn() {
+  const { data: session, status } = useSession()
+  const router = useRouter()
+
+  useEffect(() => {
+    if (status === 'authenticated') {
+      router.push('/')
+    }
+  }, [status, router])
+
   const handleSignIn = async () => {
     await signIn('google', { callbackUrl: '/' })
+  }
+
+  if (status === 'loading') {
+    return (
+      <div className="fixed inset-0 flex items-center justify-center">
+        <div className="text-sm text-neutral-600 dark:text-neutral-400">loading...</div>
+      </div>
+    )
   }
 
   return (
