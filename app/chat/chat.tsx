@@ -4,6 +4,8 @@ import { useState, useRef, useEffect } from 'react';
 import { useSession } from 'next-auth/react';
 import { HiPaperAirplane } from 'react-icons/hi2';
 import type { IconType } from 'react-icons';
+import { MemoryManager } from '../utils/memory';
+import MemoryDashboard from '../components/memory-dashboard';
 
 const errorMessages = [
   "pookie, the server's down rn, we'll talk l8r fr fr",
@@ -23,27 +25,37 @@ export default function Chat() {
   const [input, setInput] = useState('');
   const [loading, setLoading] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
+  const [isMemoryOpen, setIsMemoryOpen] = useState(false);
+
+  // Initialize user memory with session data
+  useEffect(() => {
+    if (session?.user) {
+      MemoryManager.updatePersonal({
+        name: session.user.name || undefined,
+        preferences: {
+          music: [],
+          movies: [],
+          hobbies: []
+        }
+      });
+    }
+  }, [session]);
 
   const getRandomErrorMessage = () => {
     const randomIndex = Math.floor(Math.random() * errorMessages.length);
     return errorMessages[randomIndex];
   };
 
-  const getUserInfo = () => {
-    if (!session?.user) return '';
-    const user = session.user;
-    return `
-      User Information:
-      - Name: ${user.name}
-      - Email: ${user.email}
-      - Full Name: ${user.given_name} ${user.family_name}
-      - Language: ${user.locale}
-    `;
-  };
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!input.trim()) return;
+    if (!input.trim() || loading) return;
+
+    // Check if the input is "memory" to trigger the dashboard
+    if (input.toLowerCase().trim() === 'memory') {
+      setIsMemoryOpen(true);
+      setInput('');
+      return;
+    }
 
     const userMsg = input.trim().toLowerCase();
     setInput('');
@@ -53,6 +65,11 @@ export default function Chat() {
     setMessages((prev) => [...prev, { sender: 'user', text: userMsg }]);
 
     try {
+      // Update context with new message
+      MemoryManager.updateContext({
+        lastTopics: [...MemoryManager.getMemory().context.lastTopics, userMsg]
+      });
+
       // Prepare pastMessages for API format
       const pastMessages = messages.map((msg) => ({
         role: msg.sender === 'user' ? 'user' : 'assistant',
@@ -65,12 +82,21 @@ export default function Chat() {
         body: JSON.stringify({ 
           message: userMsg, 
           pastMessages,
-          userInfo: getUserInfo()
+          userInfo: MemoryManager.getMemorySummary()
         }),
       });
 
       const data = await res.json();
       const botResponse = data.response.toLowerCase();
+
+      // Check for important information to remember
+      if (botResponse.includes('remember') || botResponse.includes('important')) {
+        MemoryManager.addHighlight(
+          'Important Information',
+          botResponse,
+          'high'
+        );
+      }
 
       setMessages((prev) => [...prev, { sender: 'cisco', text: botResponse }]);
     } catch {
@@ -154,6 +180,7 @@ export default function Chat() {
           </form>
         </div>
       </div>
+      <MemoryDashboard isOpen={isMemoryOpen} onClose={() => setIsMemoryOpen(false)} />
     </section>
   );
 }
