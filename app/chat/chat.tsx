@@ -29,6 +29,18 @@ export default function Chat() {
     return errorMessages[randomIndex];
   };
 
+  const getUserInfo = () => {
+    if (!session?.user) return '';
+    const user = session.user;
+    return `
+      User Information:
+      - Name: ${user.name}
+      - Email: ${user.email}
+      - Full Name: ${user.given_name} ${user.family_name}
+      - Language: ${user.locale}
+    `;
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!input.trim()) return;
@@ -50,7 +62,11 @@ export default function Chat() {
       const res = await fetch('/api/groq', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ message: userMsg, pastMessages }),
+        body: JSON.stringify({ 
+          message: userMsg, 
+          pastMessages,
+          userInfo: getUserInfo()
+        }),
       });
 
       const data = await res.json();
