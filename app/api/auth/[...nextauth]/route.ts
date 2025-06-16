@@ -25,13 +25,20 @@ declare module "next-auth/jwt" {
   }
 }
 
-// Extend the built-in profile types
-declare module "next-auth/providers/google" {
-  interface Profile {
-    given_name?: string
-    family_name?: string
-    locale?: string
-  }
+interface GoogleProfile {
+  iss: string
+  azp: string
+  aud: string
+  sub: string
+  email: string
+  email_verified: boolean
+  name: string
+  picture: string
+  given_name: string
+  family_name: string
+  locale: string
+  iat: number
+  exp: number
 }
 
 const handler = NextAuth({
@@ -66,9 +73,10 @@ const handler = NextAuth({
     },
     async jwt({ token, account, profile }) {
       if (profile) {
-        token.given_name = profile.given_name
-        token.family_name = profile.family_name
-        token.locale = profile.locale
+        const googleProfile = profile as GoogleProfile
+        token.given_name = googleProfile.given_name
+        token.family_name = googleProfile.family_name
+        token.locale = googleProfile.locale
       }
       return token
     }
