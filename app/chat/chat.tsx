@@ -5,6 +5,16 @@ import { useSession } from 'next-auth/react';
 import { HiPaperAirplane } from 'react-icons/hi2';
 import type { IconType } from 'react-icons';
 
+const errorMessages = [
+  "pookie, the server's down rn, we'll talk l8r fr fr",
+  "im too exhausted to reply rn, catch u later bestie",
+  "my brain's not braining rn, brb",
+  "the wifi's being sus, can't reply rn",
+  "im literally dying rn, can't even",
+  "the server's being extra rn, we'll talk later bestie",
+  "im too tired to function rn, catch u later pookie"
+];
+
 export default function Chat() {
   const { data: session } = useSession();
   const [messages, setMessages] = useState([
@@ -14,11 +24,16 @@ export default function Chat() {
   const [loading, setLoading] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
 
+  const getRandomErrorMessage = () => {
+    const randomIndex = Math.floor(Math.random() * errorMessages.length);
+    return errorMessages[randomIndex];
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!input.trim()) return;
 
-    const userMsg = input.trim();
+    const userMsg = input.trim().toLowerCase();
     setInput('');
     setLoading(true);
 
@@ -39,11 +54,11 @@ export default function Chat() {
       });
 
       const data = await res.json();
-      const botResponse = data.response;
+      const botResponse = data.response.toLowerCase();
 
       setMessages((prev) => [...prev, { sender: 'cisco', text: botResponse }]);
     } catch {
-      setMessages((prev) => [...prev, { sender: 'cisco', text: 'Failed to connect to AI.' }]);
+      setMessages((prev) => [...prev, { sender: 'cisco', text: getRandomErrorMessage() }]);
     } finally {
       setLoading(false);
     }
@@ -107,7 +122,7 @@ export default function Chat() {
                 value={input} 
                 onChange={(e) => setInput(e.target.value)}
                 onKeyDown={handleKeyDown}
-                className="flex-1 bg-transparent outline-none border-none focus:outline-none resize-none min-h-[24px] max-h-[120px] py-1"
+                className="flex-1 bg-transparent outline-none border-none focus:outline-none resize-none min-h-[24px] max-h-[120px] py-1 lowercase"
                 rows={1}
                 autoFocus 
               />
@@ -115,7 +130,7 @@ export default function Chat() {
                 type="submit" 
                 className="ml-2 p-2 text-neutral-500 hover:text-neutral-700 dark:text-neutral-400 dark:hover:text-neutral-200 transition-colors"
                 disabled={!input.trim()}
-                title="Send message"
+                title="send message"
               >
                 {HiPaperAirplane({ className: "w-5 h-5" })}
               </button>
