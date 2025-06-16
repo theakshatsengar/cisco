@@ -2,6 +2,7 @@
 
 import { useState, useRef, useEffect } from 'react';
 import { useSession } from 'next-auth/react';
+import { IoSend } from 'react-icons/io5';
 
 export default function Chat() {
   const { data: session } = useSession();
@@ -78,20 +79,11 @@ export default function Chat() {
               const nextIsCisco = next?.sender === 'cisco';
 
               return (
-                <div key={idx} className={`${isUser && nextIsCisco ? 'mb-1' : 'mb-6'} whitespace-pre-wrap`}>
-                  <div className="flex items-start">
-                    <span className="font-medium">
-                      {isUser ? session?.user?.name?.toLowerCase() : 'cisco'}:
-                    </span>
-                    <div className="ml-1 text-neutral-800 dark:text-neutral-200">
-                      {msg.text.split('\n').map((line, i) => (
-                        <p key={i} className="mb-2 last:mb-0">
-                          {line}
-                        </p>
-                      ))}
-                    </div>
-                  </div>
-                </div>
+                <p key={idx} className={isUser && nextIsCisco ? 'mb-1' : 'mb-6'}>
+                  <span className="font-medium">
+                    {isUser ? session?.user?.name?.toLowerCase() : 'cisco'}:
+                  </span> {msg.text}
+                </p>
               );
             })}
 
@@ -119,25 +111,12 @@ export default function Chat() {
                 autoFocus 
               />
               <button 
-                type="submit"
-                className="ml-2 p-1 text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-neutral-100 transition-colors"
+                type="submit" 
+                className="ml-2 p-2 text-neutral-500 hover:text-neutral-700 dark:text-neutral-400 dark:hover:text-neutral-200 transition-colors"
                 disabled={!input.trim()}
                 title="Send message"
               >
-                <svg 
-                  xmlns="http://www.w3.org/2000/svg" 
-                  viewBox="0 0 24 24" 
-                  fill="none" 
-                  stroke="currentColor" 
-                  className="w-5 h-5"
-                >
-                  <path 
-                    strokeLinecap="round" 
-                    strokeLinejoin="round" 
-                    strokeWidth={2} 
-                    d="M5 12h14M12 5l7 7-7 7" 
-                  />
-                </svg>
+                <IoSend className="w-5 h-5" />
               </button>
             </div>
           </form>
