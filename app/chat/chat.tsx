@@ -78,11 +78,20 @@ export default function Chat() {
               const nextIsCisco = next?.sender === 'cisco';
 
               return (
-                <p key={idx} className={isUser && nextIsCisco ? 'mb-1' : 'mb-6'}>
-                  <span className="font-medium">
-                    {isUser ? session?.user?.name?.toLowerCase() : 'cisco'}:
-                  </span> {msg.text}
-                </p>
+                <div key={idx} className={`${isUser && nextIsCisco ? 'mb-1' : 'mb-6'} whitespace-pre-wrap`}>
+                  <div className="flex items-start">
+                    <span className="font-medium">
+                      {isUser ? session?.user?.name?.toLowerCase() : 'cisco'}:
+                    </span>
+                    <div className="ml-1 text-neutral-800 dark:text-neutral-200">
+                      {msg.text.split('\n').map((line, i) => (
+                        <p key={i} className="mb-2 last:mb-0">
+                          {line}
+                        </p>
+                      ))}
+                    </div>
+                  </div>
+                </div>
               );
             })}
 
@@ -108,7 +117,28 @@ export default function Chat() {
                 className="flex-1 bg-transparent outline-none border-none focus:outline-none resize-none min-h-[24px] max-h-[120px] py-1"
                 rows={1}
                 autoFocus 
-              /> 
+              />
+              <button 
+                type="submit"
+                className="ml-2 p-1 text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-neutral-100 transition-colors"
+                disabled={!input.trim()}
+                title="Send message"
+              >
+                <svg 
+                  xmlns="http://www.w3.org/2000/svg" 
+                  viewBox="0 0 24 24" 
+                  fill="none" 
+                  stroke="currentColor" 
+                  className="w-5 h-5"
+                >
+                  <path 
+                    strokeLinecap="round" 
+                    strokeLinejoin="round" 
+                    strokeWidth={2} 
+                    d="M5 12h14M12 5l7 7-7 7" 
+                  />
+                </svg>
+              </button>
             </div>
           </form>
         </div>
