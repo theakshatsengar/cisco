@@ -1,0 +1,5 @@
+if the task name is empty, the task should not exist. only task with name should exist.
+if the project name is empty and there is no tasks in it, the project should not exist. only project with name or tasks inside should exist.
+
+
+
