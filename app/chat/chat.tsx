@@ -17,6 +17,38 @@ const errorMessages = [
   "im too tired to function rn, catch u later pookie"
 ];
 
+// For todo list access
+function getUserKey(user) {
+  return user?.email ? `todo_${user.email}` : 'todo_guest';
+}
+
+function getTodoSummary(session) {
+  if (typeof window === 'undefined' || !session?.user) return '';
+  const userKey = getUserKey(session.user);
+  const saved = localStorage.getItem(userKey);
+  if (!saved) return '';
+  try {
+    const parsed = JSON.parse(saved);
+    const todos = parsed.todos || [];
+    const checked = parsed.checked || {};
+    if (!todos.length) return '';
+    let summary = 'my todo list:';
+    for (const proj of todos) {
+      if (!proj.project) continue;
+      summary += `\n- project: ${proj.project}`;
+      for (const item of proj.items) {
+        if (!item) continue;
+        const checkedKey = `${proj.project}-${item}`;
+        const status = checked[checkedKey] ? 'done' : 'pending';
+        summary += `\n  - ${item} [${status}]`;
+      }
+    }
+    return summary;
+  } catch {
+    return '';
+  }
+}
+
 export default function Chat() {
   const { data: session } = useSession();
   const [messages, setMessages] = useState([
@@ -82,7 +114,7 @@ export default function Chat() {
         body: JSON.stringify({ 
           message: userMsg, 
           pastMessages,
-          userInfo: MemoryManager.getMemorySummary()
+          userInfo: MemoryManager.getMemorySummary() + '\n' + getTodoSummary(session)
         }),
       });
 
