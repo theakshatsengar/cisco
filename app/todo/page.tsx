@@ -182,7 +182,7 @@ export default function TodoPage() {
 
   return (
     <section className="fixed inset-0 flex flex-col md:items-center md:justify-center pt-16">
-      <div className="w-full ml-4 sm:ml-4 md:ml-8 md:max-w-2xl flex flex-col h-full overflow-y-auto no-scrollbar pb-8">
+      <div className="w-full max-w-2xl mx-auto px-4 flex flex-col h-full overflow-y-auto no-scrollbar pb-8">
         <div className="flex items-center justify-between mt-8 mb-4">
           <h1 className="text-lg font-semibold">{((session?.user?.name || 'your').toLowerCase()) + "'s todo list:"}</h1>
           <button
@@ -195,7 +195,7 @@ export default function TodoPage() {
                 setEditValue(newName);
               }, 0);
             }}
-            className="ml-2 opacity-80 hover:opacity-100 w-6 h-6 flex items-center justify-center rounded bg-neutral-800 border border-neutral-700"
+            className="ml-2 w-8 h-8 flex items-center justify-center rounded-full bg-neutral-800 border border-neutral-700 text-white transition-all duration-150"
             aria-label="Add new project"
           >
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-4 h-4 text-white">

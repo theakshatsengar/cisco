@@ -6,6 +6,7 @@ import { HiPaperAirplane } from 'react-icons/hi2';
 import type { IconType } from 'react-icons';
 import { MemoryManager } from '../utils/memory';
 import MemoryDashboard from '../components/memory-dashboard';
+import { useRouter } from 'next/navigation';
 
 const errorMessages = [
   "pookie, the server's down rn, we'll talk l8r fr fr",
@@ -58,6 +59,7 @@ export default function Chat() {
   const [loading, setLoading] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
   const [isMemoryOpen, setIsMemoryOpen] = useState(false);
+  const router = useRouter();
 
   // Initialize user memory with session data
   useEffect(() => {
@@ -86,6 +88,13 @@ export default function Chat() {
     if (input.toLowerCase().trim() === 'memory') {
       setIsMemoryOpen(true);
       setInput('');
+      return;
+    }
+
+    // Check if the input is "todo" to navigate to /todo
+    if (input.toLowerCase().trim() === 'todo') {
+      setInput('');
+      router.push('/todo');
       return;
     }
 
