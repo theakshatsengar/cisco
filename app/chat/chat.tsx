@@ -50,6 +50,20 @@ function getTodoSummary(session) {
   }
 }
 
+// Theme toggle helpers
+function setTheme(mode: 'darkmode' | 'lightmode') {
+  if (typeof window === 'undefined') return;
+  if (mode === 'darkmode') {
+    document.documentElement.classList.remove('lightmode');
+    document.documentElement.classList.add('darkmode');
+    localStorage.setItem('theme', 'darkmode');
+  } else {
+    document.documentElement.classList.remove('darkmode');
+    document.documentElement.classList.add('lightmode');
+    localStorage.setItem('theme', 'lightmode');
+  }
+}
+
 export default function Chat() {
   const { data: session } = useSession();
   const [messages, setMessages] = useState([
@@ -87,6 +101,18 @@ export default function Chat() {
     // Check if the input is "memory" to trigger the dashboard
     if (input.toLowerCase().trim() === 'memory') {
       setIsMemoryOpen(true);
+      setInput('');
+      return;
+    }
+
+    // Theme commands
+    if (input.toLowerCase().trim() === 'darkmode') {
+      setTheme('darkmode');
+      setInput('');
+      return;
+    }
+    if (input.toLowerCase().trim() === 'lightmode') {
+      setTheme('lightmode');
       setInput('');
       return;
     }
@@ -195,10 +221,7 @@ export default function Chat() {
         </div>
 
         <div className="flex-none">
-          <div className="w-full">
-            <div className="border-t border-neutral-100 dark:border-neutral-800" />
-          </div>
-          <form onSubmit={handleSubmit} className="p-4">
+          <form onSubmit={handleSubmit} className="p-4 mb-2">
             <div className="flex items-center text-base"> 
               <span className="font-medium mr-2">{session?.user?.name?.toLowerCase()}:</span>
               <textarea 

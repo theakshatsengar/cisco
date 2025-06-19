@@ -182,26 +182,9 @@ export default function TodoPage() {
 
   return (
     <section className="fixed inset-0 flex flex-col md:items-center md:justify-center pt-16">
-      <div className="w-full max-w-2xl mx-auto px-4 flex flex-col h-full overflow-y-auto no-scrollbar pb-8">
+      <div className="w-full max-w-2xl mx-auto px-4 flex flex-col h-full overflow-y-auto no-scrollbar pb-8 relative">
         <div className="flex items-center justify-between mt-8 mb-4">
           <h1 className="text-lg font-semibold">{((session?.user?.name || 'your').toLowerCase()) + "'s todo list:"}</h1>
-          <button
-            onClick={() => {
-              const existingNames = todos.map(t => t.project.toLowerCase());
-              const newName = getNextProjectName(existingNames);
-              setTodos(prev => [{ project: newName, items: [] }, ...prev]);
-              setTimeout(() => {
-                setEditingProjectIdx(0);
-                setEditValue(newName);
-              }, 0);
-            }}
-            className="ml-2 w-8 h-8 flex items-center justify-center rounded-full bg-neutral-800 border border-neutral-700 text-white transition-all duration-150"
-            aria-label="Add new project"
-          >
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-4 h-4 text-white">
-              <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
-            </svg>
-          </button>
         </div>
         <ul className="space-y-6">
           {todos.map((todo, projectIdx) => (
@@ -372,6 +355,24 @@ export default function TodoPage() {
             </li>
           ))}
         </ul>
+        {/* Floating Add Project Button inside the container */}
+        <button
+          onClick={() => {
+            const existingNames = todos.map(t => t.project.toLowerCase());
+            const newName = getNextProjectName(existingNames);
+            setTodos(prev => [{ project: newName, items: [] }, ...prev]);
+            setTimeout(() => {
+              setEditingProjectIdx(0);
+              setEditValue(newName);
+            }, 0);
+          }}
+          className="fixed bottom-12 right-12 w-8 h-8 flex items-center justify-center rounded-full bg-neutral-800 border border-neutral-700 text-white shadow-lg z-50 transition-all duration-150"
+          aria-label="Add new project"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-4 h-4 text-white">
+            <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+          </svg>
+        </button>
       </div>
       <style jsx global>{`
         [contenteditable][data-placeholder]:empty:before {

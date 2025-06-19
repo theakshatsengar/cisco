@@ -17,21 +17,20 @@
   --sh-entity: #e25a1c;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --sh-class: #4c97f8;
-    --sh-identifier: white;
-    --sh-keyword: #f47067;
-    --sh-string: #0fa295;
-  }
-  html {
-    color-scheme: dark;
-    background-color: rgb(17, 16, 16); /* <-- Add this line */
+html.lightmode, html.lightmode body {
+  background-color: #fff !important;
+  color: #18181b !important;
   }
 
-  body {
-    background-color: rgb(17, 16, 16); /* <-- Also add this line for body specifically */
-  }
+html.darkmode, html.darkmode body {
+  background-color: rgb(17, 16, 16) !important;
+  color: #f3f4f6 !important;
+}
+
+html, body {
+  font-family: DM Sans,ui-sans-serif,system-ui,sans-serif,Apple Color Emoji,Segoe UI Emoji,Segoe UI Symbol,Noto Color Emoji;
+  background-color: #fff;
+  color: #18181b;
 }
 
 html {
@@ -153,9 +152,6 @@ table {
 .title {
   text-wrap: balance;
 }
-
-
-
 
 .no-scrollbar::-webkit-scrollbar {
   display: none;
