@@ -1,6 +1,8 @@
 'use client';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { signOut } from 'next-auth/react';
+import Link from 'next/link';
+import { Home, SquareCheck, Bell, Settings, MessageCircle, CircleUser, Sun, Moon } from 'lucide-react';
 
 function getInitialTheme() {
   if (typeof window === 'undefined') return false;
@@ -10,11 +12,30 @@ function getInitialTheme() {
 }
 
 export default function Sidebar() {
-  const [dark, setDark] = useState(getInitialTheme);
+  const [dark, setDark] = useState(false);
   const [themeClass, setThemeClass] = useState('bg-white');
+  const [mounted, setMounted] = useState(false);
 
-  // Sync sidebar color with <html> class
   useEffect(() => {
+    setMounted(true);
+    setDark(getInitialTheme());
+  }, []);
+
+  useEffect(() => {
+    if (!mounted) return;
+    if (dark) {
+      document.documentElement.classList.remove('lightmode');
+      document.documentElement.classList.add('darkmode');
+      localStorage.setItem('theme', 'darkmode');
+    } else {
+      document.documentElement.classList.remove('darkmode');
+      document.documentElement.classList.add('lightmode');
+      localStorage.setItem('theme', 'lightmode');
+    }
+  }, [dark, mounted]);
+
+  useEffect(() => {
+    if (!mounted) return;
     const updateTheme = () => {
       const html = document.documentElement;
       if (html.classList.contains('darkmode')) {
@@ -27,48 +48,62 @@ export default function Sidebar() {
     const observer = new MutationObserver(updateTheme);
     observer.observe(document.documentElement, { attributes: true, attributeFilter: ['class'] });
     return () => observer.disconnect();
+  }, [mounted]);
+
+  // Theme toggle handler
+  const handleThemeToggle = useCallback(() => {
+    setDark((prev) => !prev);
   }, []);
 
-  useEffect(() => {
-    if (dark) {
-      document.documentElement.classList.remove('lightmode');
-      document.documentElement.classList.add('darkmode');
-      localStorage.setItem('theme', 'darkmode');
-    } else {
-      document.documentElement.classList.remove('darkmode');
-      document.documentElement.classList.add('lightmode');
-      localStorage.setItem('theme', 'lightmode');
-    }
-  }, [dark]);
+  if (!mounted) return null;
 
   return (
     <aside className="hidden md:flex flex-col items-center py-6 px-3 gap-2 fixed left-0 top-0 h-full z-60 transition-colors duration-200 w-20" style={{ background: themeClass }}>
       <div>
         {/* Top icon with highlight */}
-        <div className="mt-6 mb-12 flex flex-col items-center">
-          <div className={`w-6 h-6 rounded-full flex items-center justify-center mb-2 ${themeClass === 'bg-white' ? 'bg-black' : 'bg-white'}`}></div>
-          <div className={`flex flex-col gap-12 items-center mt-12 ${themeClass === 'bg-white' ? 'text-black' : 'text-white'}`}>
+        <div className="mt-0 mb-12 flex flex-col items-center">
+          <Link href="/" aria-label="Home">
+            <div className={`w-5 h-5 rounded-full flex items-center justify-center mb-2 cursor-pointer ${themeClass === 'bg-white' ? 'bg-black' : 'bg-white'}`}></div>
+          </Link>
+          <div className={`flex flex-col gap-12 items-center mt-8 md:mt-16 lg:mt-16 ${themeClass === 'bg-white' ? 'text-black' : 'text-white'}`}>
             {/* Home icon */}
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} className="w-5 h-5" stroke={themeClass === 'bg-white' ? '#000' : '#fff'}>
-              <path strokeLinecap="round" strokeLinejoin="round" d="M3 12l9-9 9 9M4.5 10.5V21h15V10.5" />
-            </svg>
+            <Link href="/" aria-label="Home">
+              <Home className="w-5 h-5 cursor-pointer" />
+            </Link>
             {/* Checklist icon */}
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} className="w-5 h-5" stroke={themeClass === 'bg-white' ? '#000' : '#fff'}>
-              <rect x="4" y="4" width="16" height="16" rx="4" />
-              <path d="M8 12l2 2 4-4" />
-            </svg>
+            <Link href="/todo" aria-label="Todo">
+              <SquareCheck className="w-5 h-5 cursor-pointer" />
+            </Link>
+            {/* Notification icon */}
+            <button aria-label="Notifications" title="Notifications" className="focus:outline-none">
+              <Bell className="w-5 h-5 cursor-pointer" />
+            </button>
+            {/* Settings icon */}
+            <Link href="/settings" aria-label="Settings" title="Settings">
+              <Settings className="w-5 h-5 cursor-pointer" />
+            </Link>
+            {/* Feedback icon */}
+            <Link href="/feedback" aria-label="Feedback" title="Feedback">
+              <MessageCircle className="w-5 h-5 cursor-pointer" />
+            </Link>
           </div>
         </div>
       </div>
       <div className="flex flex-col items-center gap-6 mt-auto mb-4">
-        {/* Profile icon at the bottom */}
-        <button className="flex items-center justify-center" aria-label="Profile">
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} className="w-5 h-5" stroke={themeClass === 'bg-white' ? '#000' : '#fff'}>
-            <circle cx="12" cy="8" r="4" />
-            <path d="M4 20c0-4 8-4 8-4s8 0 8 4" />
-          </svg>
+        {/* Theme toggle */}
+        <button onClick={handleThemeToggle} aria-label="Toggle theme" title="Toggle theme" className="mb-4 p-2 rounded-full transition-colors">
+          {dark ? (
+            <Moon className="w-5 h-5" />
+          ) : (
+            <Sun className="w-5 h-5" />
+          )}
         </button>
+        {/* Profile icon at the bottom */}
+        <Link href="/profile" aria-label="Profile" className="flex items-center justify-center">
+          <CircleUser className="w-5 h-5 cursor-pointer" />
+        </Link>
       </div>
     </aside>
   );
 } 
+
