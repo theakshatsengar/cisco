@@ -63,7 +63,7 @@ export default function Sidebar() {
         {/* Top icon with highlight */}
         <div className="mt-0 mb-12 flex flex-col items-center">
           <Link href="/" aria-label="Home">
-            <div className={`w-5 h-5 rounded-full flex items-center justify-center mb-2 cursor-pointer ${themeClass === 'bg-white' ? 'bg-black' : 'bg-white'}`}></div>
+            {/* <div className={`w-5 h-5 rounded-full flex items-center justify-center mb-2 cursor-pointer ${themeClass === 'bg-white' ? 'bg-black' : 'bg-white'}`}></div> */}
           </Link>
           <div className={`flex flex-col gap-12 items-center mt-8 md:mt-16 lg:mt-16 ${themeClass === 'bg-white' ? 'text-black' : 'text-white'}`}>
             {/* Home icon */}
