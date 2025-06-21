@@ -189,7 +189,7 @@ export default function Chat() {
 
   return (
     <section className="fixed inset-0 flex flex-col md:items-center md:justify-center pt-16">
-      <div className="w-full md:max-w-2xl flex flex-col h-full">
+      <div className="w-full md:max-w-2xl flex flex-col h-full relative">
         <div
           ref={scrollRef}
           className="flex-1 overflow-y-auto px-4"
@@ -221,6 +221,8 @@ export default function Chat() {
         </div>
 
         <div className="flex-none">
+          {/* Thin dividing line above typing box */}
+          <div className="w-full h-px bg-neutral-200 dark:bg-neutral-800" />
           <form onSubmit={handleSubmit} className="p-4 mb-2">
             <div className="flex items-center text-base"> 
               <span className="font-medium mr-2">{session?.user?.name?.toLowerCase()}:</span>
@@ -231,6 +233,7 @@ export default function Chat() {
                 className="flex-1 bg-transparent outline-none border-none focus:outline-none resize-none min-h-[24px] max-h-[120px] py-1 lowercase"
                 rows={1}
                 autoFocus 
+                placeholder="Type your message..."
               />
               <button 
                 type="submit" 

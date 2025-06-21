@@ -31,25 +31,30 @@ export default function Nav() {
   }, [])
 
   return (
-    <nav className={`fixed top-0 left-0 right-0 z-40 transition-colors duration-200 ${themeClass}`}>
-      <div className="w-full px-4 md:px-6 h-16 flex items-center justify-between">
-        <Link href="/" className="text-2xl font-semibold tracking-tighter">cisco.</Link>
-        {session?.user ? (
-          <button
-            onClick={() => signOut({ callbackUrl: '/signin' })}
-            className="text-sm text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-neutral-100 transition-colors"
-          >
-            sign out
-          </button>
-        ) : (
-          <button
-            onClick={() => signIn('google', { callbackUrl: '/' })}
-            className="text-sm text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-neutral-100 transition-colors"
-          >
-            sign in
-          </button>
-        )}
-      </div>
-    </nav>
+    <>
+      <nav className={`fixed top-0 left-0 right-0 z-40 transition-colors duration-200 ${themeClass}`}>
+        <div className="w-full h-16 flex items-center px-4">
+          <Link href="/" className="text-2xl font-semibold tracking-tighter ml-0 md:ml-16 flex-shrink-0">cisco.</Link>
+          <div className="flex-1" />
+          {session?.user ? (
+            <button
+              onClick={() => signOut({ callbackUrl: '/signin' })}
+              className="text-sm text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-neutral-100 transition-colors mr-0 md:mr-4"
+            >
+              sign out
+            </button>
+          ) : (
+            <button
+              onClick={() => signIn('google', { callbackUrl: '/' })}
+              className="text-sm text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-neutral-100 transition-colors mr-0 md:mr-4"
+            >
+              sign in
+            </button>
+          )}
+        </div>
+        {/* Thin dividing line under navbar */}
+        <div className="fixed top-16 left-0 right-0 h-px bg-neutral-200 dark:bg-neutral-800 z-40 md:ml-16" />
+      </nav>
+    </>
   )
 }

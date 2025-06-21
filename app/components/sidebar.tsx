@@ -58,12 +58,14 @@ export default function Sidebar() {
   if (!mounted) return null;
 
   return (
-    <aside className="hidden md:flex flex-col items-center py-6 px-3 gap-2 fixed left-0 top-0 h-full z-60 transition-colors duration-200 w-20" style={{ background: themeClass }}>
+    <aside className="hidden md:flex flex-col items-center py-6 px-3 gap-2 fixed left-0 top-0 h-full z-60 transition-colors duration-200 w-16" style={{ background: themeClass }}>
+      {/* Vertical dividing line */}
+      <div className="absolute top-0 right-0 h-full w-px bg-neutral-200 dark:bg-neutral-800" style={{ zIndex: 70 }} />
       <div>
         {/* Top icon with highlight */}
         <div className="mt-0 mb-12 flex flex-col items-center">
           <Link href="/" aria-label="Home">
-            {/* <div className={`w-5 h-5 rounded-full flex items-center justify-center mb-2 cursor-pointer ${themeClass === 'bg-white' ? 'bg-black' : 'bg-white'}`}></div> */}
+            <div className={`w-5 h-5 rounded-full flex items-center justify-center mb-2 cursor-pointer ${themeClass === 'bg-white' ? 'bg-black' : 'bg-white'}`}></div>
           </Link>
           <div className={`flex flex-col gap-12 items-center mt-8 md:mt-16 lg:mt-16 ${themeClass === 'bg-white' ? 'text-black' : 'text-white'}`}>
             {/* Home icon */}
