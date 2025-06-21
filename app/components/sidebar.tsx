@@ -64,16 +64,16 @@ export default function Sidebar() {
       <div>
         {/* Top icon with highlight */}
         <div className="mt-0 mb-12 flex flex-col items-center">
-          <Link href="/" aria-label="Home">
+          <Link href="/" aria-label="Home" title="cisco.">
             <div className={`w-5 h-5 rounded-full flex items-center justify-center mb-2 cursor-pointer ${themeClass === 'bg-white' ? 'bg-black' : 'bg-white'}`}></div>
           </Link>
           <div className={`flex flex-col gap-12 items-center mt-8 md:mt-16 lg:mt-16 ${themeClass === 'bg-white' ? 'text-black' : 'text-white'}`}>
             {/* Home icon */}
-            <Link href="/" aria-label="Home">
+            <Link href="/" aria-label="Home" title="Home">
               <Home className="w-5 h-5 cursor-pointer" />
             </Link>
             {/* Checklist icon */}
-            <Link href="/todo" aria-label="Todo">
+            <Link href="/todo" aria-label="Todo" title="Todo">
               <SquareCheck className="w-5 h-5 cursor-pointer" />
             </Link>
             {/* Notification icon */}
@@ -101,7 +101,7 @@ export default function Sidebar() {
           )}
         </button>
         {/* Profile icon at the bottom */}
-        <Link href="/profile" aria-label="Profile" className="flex items-center justify-center">
+        <Link href="/profile" aria-label="Profile" title="Profile" className="flex items-center justify-center">
           <CircleUser className="w-5 h-5 cursor-pointer" />
         </Link>
       </div>
